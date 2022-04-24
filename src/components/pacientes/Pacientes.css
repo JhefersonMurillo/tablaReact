@@ -1,0 +1,20 @@
+.modal {
+  position: absolute;
+  width: 400px;
+  border: 2px solid #000;
+  top: "50%";
+  left: "50%";
+  transform: translate(-50%, -50%);
+}
+
+.button {
+  border: none;
+  background-color: palevioletred;
+  color: white;
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 8px;
+}
+.icons {
+  cursor: pointer;
+}
