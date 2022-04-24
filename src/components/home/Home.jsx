@@ -4,7 +4,7 @@ import axios from "axios";
 function Home() {
   return (
     <div>
-      <h1>Home</h1>
+      <h1>Clinica Dental</h1>
       <div>
         <Link to="/pacientes">Pacientes</Link>
         <Link to="/odontologos">Odontologos</Link>

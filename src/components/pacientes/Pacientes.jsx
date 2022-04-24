@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useSyncExternalStore } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
-import "./Pacientes.css";
+import "../../styles/styles.css";
 import {
   Table,
   TableContainer,
@@ -13,7 +13,7 @@ import {
   Button,
   TextField,
 } from "@material-ui/core";
-import { Edit, Delete } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -39,9 +39,6 @@ function Pacientes() {
   const styles = useStyles();
   const [data, setData] = useState([]);
   const [isOpenAgree, setIsOpenAgree] = useState(false);
-  const [isOpenDelete, setIsOpenDelete] = useState(false);
-  const [isOpenEdit, setIsOpenEdit] = useState(false);
-  const [patientSelect, setPatientSelect] = useState({});
   const [form, setForm] = useState({
     apellido: "",
     nombre: "",
@@ -106,10 +103,7 @@ function Pacientes() {
       console.log(error);
     }
   };
-  const handleIcon = (paciente, method) => {
-    setForm(paciente);
-    method === "delete" ? toogleModalDelete : toogleModalEdit;
-  };
+
   useEffect(() => {
     getAllPatients();
   }, []);
@@ -189,19 +183,7 @@ function Pacientes() {
     </div>
   );
 
-  const modalEdit = (
-    <div className={styles.modal}>
-      <p>
-        ¿Desea eliminar el usuario <b>{form}</b>
-      </p>
-    </div>
-  );
-
   const deletePatient = async (id) => {
-    /* const paciente = data.find((paciente) => paciente.id === id);
-    setPatientSelect({ ...paciente }); */
-    console.log("Entro");
-    console.log(id);
     try {
       const request = await axios.delete(
         `http://localhost:8080/pacientes/${id}`
@@ -217,12 +199,7 @@ function Pacientes() {
   const toogleModalAgree = () => {
     setIsOpenAgree(!isOpenAgree);
   };
-  const toogleModalDelete = () => {
-    setIsOpenDelete(!isOpenDelete);
-  };
-  const toogleModalEdit = () => {
-    setIsOpenEdit(!isOpenEdit);
-  };
+
   return (
     <div>
       <h1>Pacientes</h1>
@@ -231,43 +208,55 @@ function Pacientes() {
           Crear paciente
         </button>
       </div>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Apellido</TableCell>
-            <TableCell>Nombre</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>DNI</TableCell>
-            <TableCell>Fecha Ingreso</TableCell>
-            <TableCell>Calle</TableCell>
-            <TableCell>Número</TableCell>
-            <TableCell>Localidad</TableCell>
-            <TableCell>Provincia</TableCell>
-            <TableCell>Acciones</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map(
-            ({ id, apellido, nombre, email, dni, fechaIngreso, domicilio }) => (
-              <TableRow key={id}>
-                <TableCell>{apellido}</TableCell>
-                <TableCell>{nombre}</TableCell>
-                <TableCell>{email}</TableCell>
-                <TableCell>{dni}</TableCell>
-                <TableCell>{fechaIngreso}</TableCell>
-                <TableCell>{domicilio?.calle}</TableCell>
-                <TableCell>{domicilio?.numero}</TableCell>
-                <TableCell>{domicilio?.localidad}</TableCell>
-                <TableCell>{domicilio?.provincia}</TableCell>
-                <TableCell>
-                  <Delete className="icon" onClick={() => deletePatient(id)} />
-                </TableCell>
-              </TableRow>
-            )
-          )}
-        </TableBody>
-      </Table>
-
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Apellido</TableCell>
+              <TableCell>Nombre</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>DNI</TableCell>
+              <TableCell>Fecha Ingreso</TableCell>
+              <TableCell>Calle</TableCell>
+              <TableCell>Número</TableCell>
+              <TableCell>Localidad</TableCell>
+              <TableCell>Provincia</TableCell>
+              <TableCell>Acciones</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map(
+              ({
+                id,
+                apellido,
+                nombre,
+                email,
+                dni,
+                fechaIngreso,
+                domicilio,
+              }) => (
+                <TableRow key={id}>
+                  <TableCell>{apellido}</TableCell>
+                  <TableCell>{nombre}</TableCell>
+                  <TableCell>{email}</TableCell>
+                  <TableCell>{dni}</TableCell>
+                  <TableCell>{fechaIngreso}</TableCell>
+                  <TableCell>{domicilio?.calle}</TableCell>
+                  <TableCell>{domicilio?.numero}</TableCell>
+                  <TableCell>{domicilio?.localidad}</TableCell>
+                  <TableCell>{domicilio?.provincia}</TableCell>
+                  <TableCell>
+                    <Delete
+                      className="icon"
+                      onClick={() => deletePatient(id)}
+                    />
+                  </TableCell>
+                </TableRow>
+              )
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <Modal open={isOpenAgree} onClose={toogleModalAgree}>
         {modalCreate}
       </Modal>
