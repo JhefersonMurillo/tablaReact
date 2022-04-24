@@ -206,9 +206,9 @@ function Pacientes() {
       const request = await axios.delete(
         `http://localhost:8080/pacientes/${id}`
       );
-      if (request.data === "OK") {
+      if (request && request.data) {
         const pacientes = data.filter((paciente) => paciente.id !== id);
-        console.log(pacientes);
+        setData(pacientes);
       }
     } catch (error) {
       console.log(error);
